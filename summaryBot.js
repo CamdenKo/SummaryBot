@@ -6,6 +6,7 @@
 //filter out common words?
 
 const Vertex = require('./summaryBotVertex.js')
+const stopWords = require('./stopWords.js')
 
 function summaryBot() {
   this.vertexes = []
@@ -23,14 +24,17 @@ summaryBot.prototype.run = function (text, numReturnSentences) {
   //fix to use error instead
   let lastV0
   let curV0
-  let off
-  for (let iterate = 0; iterate < 20; iterate++) {
+  let off = 10
+  let iterate = 0
+  while (off > this.errorThreshold) {
     this._updateAllVertexWeights()
-    if (iterate === 0) curV0 = this.vertexes[0].weight
-    else {
+    if (iterate === 0) {
+      curV0 = this.vertexes[0].weight
+      iterate++
+    } else {
       lastV0 = curV0
       curV0 = this.vertexes[0].weight
-      off = curV0 - lastV0
+      off = Math.abs(curV0 - lastV0)
     }
   }
   return this.getTopSentences(numReturnSentences)
@@ -53,7 +57,7 @@ summaryBot.prototype._proccessString = function (text) {
 
 //adds vertex
 summaryBot.prototype._addVertex = function (wordArr) {
-  this.vertexes.push(new Vertex(this.numVertexes++, wordArr.filter((word) => word.length !== 0)))
+  this.vertexes.push(new Vertex(this.numVertexes++, wordArr.filter((word) => word.length !== 0 && word.length !== 1 && !stopWords.has(word))))
 }
 
 //does an iteration of summaryBot
@@ -120,7 +124,9 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
   }
   this._sortVertexesByWeight()
   let topSentencesArr = []
+
   for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
+
     topSentencesArr.push(this.vertexes[sentenceOut])
   }
 
@@ -130,11 +136,10 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
     return 1
   })
 
-
   let out = topSentencesArr.map(function (vert) {
     return this.originalSentences[vert.name]
   }.bind(this))
-  return out.join('. ')
+  return out.join('.  ')
 }
 
 summaryBot.prototype._sortVertexesByWeight = function () {
