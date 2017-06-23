@@ -1,0 +1,28 @@
+{
+  "name": "SummaryBot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "summaryBot.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CamdenK/SummaryBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CamdenK/SummaryBot/issues"
+  },
+  "homepage": "https://github.com/CamdenK/SummaryBot#readme",
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "chai-spies": "^0.7.1",
+    "mocha": "^3.4.2"
+  }
+}
