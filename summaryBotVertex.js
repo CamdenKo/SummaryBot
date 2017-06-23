@@ -9,6 +9,7 @@ function vertex(name, arrWords) {
   this.name = name
   this.edge = {} //name: edgeW
   this.weight = Math.floor(Math.random() * 10) + 1; //1-10
+  this.origSentence = arrWords.join(' ')
   this.words = new Set(arrWords)
   this.numWords = this.words.size
 }
@@ -16,7 +17,6 @@ function vertex(name, arrWords) {
 //adds to edge the connection
 vertex.prototype.connection = function (connectName, weight) {
   this.edge[connectName] = weight
-  console.log('edges', this.edge)
 }
 
 module.exports = vertex
