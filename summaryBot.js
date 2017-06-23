@@ -101,11 +101,11 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
     return 1
   })
 
+
   let out = topSentencesArr.map(function (vert) {
-    return vert.origSentence + '. '
-  })
-  //console.log(out)
-  return out.join(' ')
+    return this.originalSentences[vert.name]
+  }.bind(this))
+  return out.join('. ')
 }
 
 summaryBot.prototype.sortVertexesByWeight = function () {
