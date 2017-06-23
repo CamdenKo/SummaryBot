@@ -19,4 +19,8 @@ vertex.prototype.connection = function (connectName, weight) {
   this.edge[connectName] = weight
 }
 
+vertex.prototype.getWeight = function () {
+  return this.weight;
+}
+
 module.exports = vertex
