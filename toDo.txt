@@ -1,0 +1,17 @@
+ICEBOX
+[] - integration with paragraphs
+[] - automatic line generation choice based on weights???
+  []-check the weights of the outputs (describe a healthy range?)
+  [] - perhaps just a percentage of lines? -- could work but would be bad for very dense text
+[] - check if object vs set is optimal? Could be {word: count}, then when checking the overlap simply multiply their values
+[] - special character dealing?
+[] - expanding stopwords
+[] - make into one file
+[] - log10 vs ln
+
+ONGOING
+[] - turn into npm package
+    [] - clean upthe ui
+    [] - fit into one file
+[] - clean code
+DONE

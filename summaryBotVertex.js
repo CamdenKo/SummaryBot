@@ -9,7 +9,6 @@ function vertex(name, arrWords) {
   this.name = name
   this.edge = {} //name: edgeW
   this.weight = Math.floor(Math.random() * 10) + 1; //1-10
-  this.origSentence = arrWords.join(' ')
   this.words = new Set(arrWords)
   this.numWords = this.words.size
 }

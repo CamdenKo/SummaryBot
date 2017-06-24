@@ -1,5 +1,6 @@
 //SUMMARY BOT
 //CAMDEN KO
+//use summaryBot.
 /*eslint-env node*/
 /*eslint-env es6*/
 //constructor for a summaryBot
@@ -16,39 +17,64 @@ function summaryBot() {
   this.filteredSentences = []
   this.errorThreshold = .01
   this.unconnectedVertexes = new Set()
+  this.infoOnLastRun = {}
 }
 
-summaryBot.prototype.run = function (text, numReturnSentences) {
+summaryBot.prototype.summary = function () {
+  if (this.infoOnLastRun) {
+    let out = ""
+    let origNumWords = this.originalSentences.join(' ').split(' ').length
+    out += "\n\nOriginal Number of Lines: " + this.originalSentences.length + "\n"
+    out += "Original Number of Words: " + origNumWords + "\n"
+    out += "Condensed Number of Lines: " + this.infoOnLastRun.numLines + '\n'
+    out += "Condensed Number of Words: " + this.infoOnLastRun.numWords + '\n'
+    return out += "% words kept " + Math.round(100 * this.infoOnLastRun.numWords / origNumWords * 100) / 100 + "%"
+  }
+}
+
+summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
+  if(typeof(text) != 'string' || typeof(numReturnSentences) != 'number')
+  {
+    throw new TypeError('ensure that you pass valild values into summaryBot.prototype.run')
+  }
   this._proccessString(text)
   this._initialize()
-  //fix to use error instead
   let lastV0
   let curV0
   let off = 10
-  let iterate = 0
   while (off > this.errorThreshold) {
     this._updateAllVertexWeights()
-    if (iterate === 0) {
+    if (!curV0) {
       curV0 = this.vertexes[0].weight
-      iterate++
     } else {
       lastV0 = curV0
       curV0 = this.vertexes[0].weight
       off = Math.abs(curV0 - lastV0)
     }
   }
-  return this.getTopSentences(numReturnSentences)
+  let output = this.getTopSentences(numReturnSentences)
+  this.infoOnLastRun = {
+    err: off,
+    numLines: numReturnSentences,
+    numWords: output.split(' ').length
+  }
+  if (testStatistics) {
+    output += this.summary()
+  }
+  return output
 }
 //will properly create graph
 summaryBot.prototype._proccessString = function (text) {
   this.originalSentences = text.split(/[.|?|!] /)
   for (let sentence = 0; sentence < this.originalSentences.length; sentence++) {
-    this.filteredSentences[sentence] = this.originalSentences[sentence].replace(/[^a-zA-Z0-9 ]/g, " ")
+    this.filteredSentences[sentence] = this.originalSentences[sentence].replace(/[^a-zA-Z0-9 \']/g, " ")
   }
 
   this.filteredSentences = this.filteredSentences.filter(function (content) {
     return content != '';
   })
+
+  console.log(this.filteredSentences)
 
   for (let sentence = 0; sentence < this.filteredSentences.length; sentence++) {
     this._addVertex(this.filteredSentences[sentence].toLowerCase().split(' '))
@@ -139,7 +165,7 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
   let out = topSentencesArr.map(function (vert) {
     return this.originalSentences[vert.name]
   }.bind(this))
-  return out.join('.  ')
+  return out.join('. ')
 }
 
 summaryBot.prototype._sortVertexesByWeight = function () {
