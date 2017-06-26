@@ -15,3 +15,11 @@ ONGOING
     [] - fit into one file
 [] - clean code
 DONE
+
+
+[] - use an object key: value
+use a json file to store the stop words
+  json files that has an array, require the json file array in json -> set in the file
+get rid of getters/setters
+get rid of abbreviations
+json .org

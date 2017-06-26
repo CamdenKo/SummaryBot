@@ -22,19 +22,25 @@ function summaryBot() {
 
 summaryBot.prototype.summary = function () {
   if (this.infoOnLastRun) {
+
+    // REMOVE LATER FOR TESTING ONLY
+    for (let vert = 0; vert < this.vertexes.length; vert++) {
+      console.log(this.vertexes[vert].weight)
+    }
+    //REMOVE ME
     let out = ""
     let origNumWords = this.originalSentences.join(' ').split(' ').length
     out += "\n\nOriginal Number of Lines: " + this.originalSentences.length + "\n"
     out += "Original Number of Words: " + origNumWords + "\n"
     out += "Condensed Number of Lines: " + this.infoOnLastRun.numLines + '\n'
     out += "Condensed Number of Words: " + this.infoOnLastRun.numWords + '\n'
-    return out += "% words kept " + Math.round(100 * this.infoOnLastRun.numWords / origNumWords * 100) / 100 + "%"
+    out += "% words kept " + Math.round(100 * this.infoOnLastRun.numWords / origNumWords * 100) / 100 + "%"
+    return out + "\nError: " + Math.round(10000 * this.infoOnLastRun.err) / 100 + "%"
   }
 }
 
 summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
-  if(typeof(text) != 'string' || typeof(numReturnSentences) != 'number')
-  {
+  if (typeof (text) != 'string' || typeof (numReturnSentences) != 'number') {
     throw new TypeError('ensure that you pass valild values into summaryBot.prototype.run')
   }
   this._proccessString(text)
@@ -52,6 +58,7 @@ summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
       off = Math.abs(curV0 - lastV0)
     }
   }
+
   let output = this.getTopSentences(numReturnSentences)
   this.infoOnLastRun = {
     err: off,
@@ -63,6 +70,28 @@ summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
   }
   return output
 }
+
+//returns the error between last run
+summaryBot.prototype.getTopSentences = function (numSentences) {
+  if (numSentences > this.numVertexes) {
+    throw new Error("there's not that many sentences to print")
+  }
+  this._sortVertexesByWeight()
+  let topSentencesArr = []
+  for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
+    topSentencesArr.push(this.vertexes[sentenceOut])
+  }
+  //out now only has the top sentence. now reorder by original order
+  topSentencesArr.sort(function (a, b) {
+    if (a.name < b.name) return -1
+    return 1
+  })
+  let out = topSentencesArr.map(function (vert) {
+    return this.originalSentences[vert.name]
+  }.bind(this))
+  return out.join('. ') + '.'
+}
+
 //will properly create graph
 summaryBot.prototype._proccessString = function (text) {
   this.originalSentences = text.split(/[.|?|!] /)
@@ -74,19 +103,17 @@ summaryBot.prototype._proccessString = function (text) {
     return content != '';
   })
 
-  console.log(this.filteredSentences)
-
   for (let sentence = 0; sentence < this.filteredSentences.length; sentence++) {
-    this._addVertex(this.filteredSentences[sentence].toLowerCase().split(' '))
+    this._addVertex(this.filteredSentences[sentence].toLowerCase().split(' ').filter((word) => word && word.length !== 1 && !stopWords.has(word)))
   }
 }
 
 //adds vertex
 summaryBot.prototype._addVertex = function (wordArr) {
-  this.vertexes.push(new Vertex(this.numVertexes++, wordArr.filter((word) => word.length !== 0 && word.length !== 1 && !stopWords.has(word))))
+  this.vertexes.push(new Vertex(this.numVertexes++, wordArr))
 }
 
-//does an iteration of summaryBot
+//sets the similarity edge weights for each node
 summaryBot.prototype._initialize = function () {
   //update edge weight
   let similarity
@@ -105,11 +132,11 @@ summaryBot.prototype._updateAllVertexWeights = function () {
   var tempSum = 0
   for (let vertexNum = 0; vertexNum < this.numVertexes; vertexNum++) {
     for (let otherVertex = 0; otherVertex < this.numVertexes; otherVertex++) {
-      if (otherVertex !== vertexNum && !this.unconnectedVertexes.has(otherVertex) && this.vertexes[vertexNum].weight !== 0) {
+      if (otherVertex !== vertexNum && !this.unconnectedVertexes.has(otherVertex)) {
         tempSum += this.vertexes[vertexNum].edge[otherVertex] / totalEdgeWeights[otherVertex] * this.vertexes[otherVertex].weight
       }
     }
-    this.vertexes[vertexNum].weight = (this.dampeningFactor) + this.dampeningFactor * tempSum
+    this.vertexes[vertexNum].weight = (1 - this.dampeningFactor) + this.dampeningFactor * tempSum
     tempSum = 0
   }
 }
@@ -141,31 +168,6 @@ summaryBot.prototype._findSimilarity = function (vert1, vert2) {
     }
   }
   return overlap / (Math.log(vert1.numWords) + Math.log(vert2.numWords))
-}
-
-//returns the error between last run
-summaryBot.prototype.getTopSentences = function (numSentences) {
-  if (numSentences > this.numVertexes) {
-    throw new Error("there's not that many sentences to print")
-  }
-  this._sortVertexesByWeight()
-  let topSentencesArr = []
-
-  for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
-
-    topSentencesArr.push(this.vertexes[sentenceOut])
-  }
-
-  //out now only has the top sentence. now reorder by original order
-  topSentencesArr.sort(function (a, b) {
-    if (a.name < b.name) return -1
-    return 1
-  })
-
-  let out = topSentencesArr.map(function (vert) {
-    return this.originalSentences[vert.name]
-  }.bind(this))
-  return out.join('. ')
 }
 
 summaryBot.prototype._sortVertexesByWeight = function () {
