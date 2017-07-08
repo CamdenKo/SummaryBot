@@ -162,9 +162,15 @@ summaryBot.prototype._getEdgeTotals = function () {
 //in: vertex obj
 summaryBot.prototype._findSimilarity = function (vert1, vert2) {
   let overlap = 0
-  for (let word of vert1.words) {
-    if (vert2.words.has(word)) { //set O(constant)
-      overlap++
+  // for (let word of vert1.words) {
+  //   if (vert2.words.has(word)) { //set O(constant)
+  //     overlap++
+  //   }
+  // }
+  for(let word in vert1.words){
+    if(vert2.words[word]){
+
+      overlap += Math.pow(vert1.words[word] * vert2.words[word],.5)
     }
   }
   return overlap / (Math.log(vert1.numWords) + Math.log(vert2.numWords))

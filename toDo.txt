@@ -23,3 +23,25 @@ use a json file to store the stop words
 get rid of getters/setters
 get rid of abbreviations
 json .org
+ES6 TEMPLATE STRINGS
+
+vertexes-> verticies
+function to establish edge in both directions -> makeUndirectedEdge
+
+change _initialize
+process string -> map
+turn regex to its own function -> completely describe the regx with the function name
+
+use arrow functoin
+
+98 -> map.filter
+
+precompile regex
+106 map
+
+THEN add vertex
+
+sum function(iteratble, higher order function)
+
+lodash -> sumBy
+use lodash to simplify code base
