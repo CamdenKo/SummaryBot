@@ -37,7 +37,7 @@ summaryBot.prototype.summary = function () {
 }
 
 summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
-  if (typeof (text) != 'string' || typeof (numReturnSentences) != 'number') {
+  if (typeof (text) !== 'string' || typeof (numReturnSentences) !== 'number') {
     throw new TypeError('ensure that you pass valild values into summaryBot.prototype.run')
   }
   this._proccessString(text)
