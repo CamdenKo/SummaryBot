@@ -25,7 +25,7 @@ get rid of abbreviations
 json .org
 ES6 TEMPLATE STRINGS
 
-vertexes-> verticies
+[x] verticies-> verticies
 function to establish edge in both directions -> makeUndirectedEdge
 
 change _initialize
