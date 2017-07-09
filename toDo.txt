@@ -17,13 +17,13 @@ ONGOING
 DONE
 
 
-[] - use an object key: value
+[x] - use an object key: value
 use a json file to store the stop words
   json files that has an array, require the json file array in json -> set in the file
-get rid of getters/setters
+x get rid of getters/setters
 get rid of abbreviations
 json .org
-ES6 TEMPLATE STRINGS
+x ES6 TEMPLATE STRINGS
 
 [x] verticies-> verticies
 function to establish edge in both directions -> makeUndirectedEdge
