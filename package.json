@@ -1,6 +1,6 @@
 {
   "name": "summarybot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "summaryBot.js",
   "directories": {
@@ -13,7 +13,12 @@
     "type": "git",
     "url": "git+https://github.com/CamdenK/SummaryBot.git"
   },
-  "keywords": ["text", "summary", "bot", "textrank"],
+  "keywords": [
+    "text",
+    "summary",
+    "bot",
+    "textrank"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
