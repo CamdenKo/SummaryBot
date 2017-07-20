@@ -1,4 +1,7 @@
 # SummaryBot
+## NPM Package
+https://www.npmjs.com/package/summarybot
+
 ## Description
 A simple javascript script that will dissect text and pull the most relevant sentences. It uses techniques described in **TextRank: Bringing Order into Texts:** https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf
 
