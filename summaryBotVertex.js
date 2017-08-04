@@ -10,16 +10,16 @@ function vertex(name, arrWords) {
   this.edge = {} //{name: edge weight}
   this.weight = Math.floor(Math.random() * 10) + 1; //1-10
   this.words = {} //{word: count}
-  for(let word = 0; word < arrWords.length; word++){
-    if(this.words[arrWords[word]]){
+  for (let word = 0; word < arrWords.length; word++){
+    if (this.words[arrWords[word]]){
       this.words[arrWords[word]]++
     }
-    else{
+    else {
       this.words[arrWords[word]] = 1
     }
   }
   this.numWords = 0
-  for(let word in this.words){
+  for (let word in this.words){
     this.numWords += this.words[word]
   }
 }

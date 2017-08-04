@@ -71,6 +71,9 @@ summaryBot.prototype.run = function (text, numReturnSentences, testStatistics = 
 }
 
 summaryBot.prototype._findBestNumSentences = function() {
+  if(this.verticies.length <= 3) {
+    return this.verticies.length
+  }
   const max = this.verticies[0]
   let vertex = 1
   while (this.verticies[vertex] && this.verticies[vertex] > max - 0.5) {
@@ -83,17 +86,15 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
   let out
   this._sortVerticiesByWeight()
 
-  if(!numSentences) {
+  let topSentencesArr = []
+  if (!numSentences) {
     numSentences = this._findBestNumSentences()
-  }
-  if (numSentences > this.numVerticies) {
-    out = this.originalSentences
+  } else if (numSentences > this.numVerticies) {
+    return this.originalSentences.join('.')
   } else {
-    let topSentencesArr = []
     for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
       topSentencesArr.push(this.verticies[sentenceOut])
     }
-    //out now only has the top sentence. now reorder by original order
     topSentencesArr.sort(function (a, b) {
       if (a.name < b.name) return -1
       return 1
@@ -101,6 +102,9 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
     out = topSentencesArr.map(function (vert) {
       return this.originalSentences[vert.name]
     }.bind(this))
+  }
+  if (topSentencesArr.some(vert => vert.name === this.originalSentences.length - 1)) {
+    return out.join('. ')
   }
   return out.join('. ') + '.'
 }
