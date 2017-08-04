@@ -31,15 +31,16 @@ summaryBot.prototype.summary = function () {
     Condensed Number of Lines: ${this.infoOnLastRun.numLines}
     Condensed Number of Words: ${this.infoOnLastRun.numWords}
     % workds kept: ${Math.round(100 * this.infoOnLastRun.numWords / origNumWords * 100) / 100}%
-    Error: ${Math.round(10000* this.infoOnLastRun.err) / 100}%
+    Error: ${Math.round(10000 * this.infoOnLastRun.err) / 100}%
     `)
   }
 }
 
-summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
+summaryBot.prototype.run = function (text, numReturnSentences, testStatistics = false) {
   if (typeof (text) !== 'string' || typeof (numReturnSentences) !== 'number') {
     throw new TypeError('ensure that you pass valild values into summaryBot.prototype.run')
   }
+
   this._proccessString(text)
   this._initialize()
   let lastV0
@@ -57,6 +58,7 @@ summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
   }
 
   let output = this.getTopSentences(numReturnSentences)
+
   this.infoOnLastRun = {
     err: errorLevel,
     numLines: numReturnSentences,
@@ -68,13 +70,25 @@ summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
   return output
 }
 
+summaryBot.prototype._findBestNumSentences = function() {
+  const max = this.verticies[0]
+  let vertex = 1
+  while (this.verticies[vertex] && this.verticies[vertex] > max - 0.5) {
+    vertex++
+  }
+  return vertex
+}
 //returns the error between last run
 summaryBot.prototype.getTopSentences = function (numSentences) {
   let out
+  this._sortVerticiesByWeight()
+
+  if(!numSentences) {
+    numSentences = this._findBestNumSentences()
+  }
   if (numSentences > this.numVerticies) {
     out = this.originalSentences
   } else {
-    this._sortVerticiesByWeight()
     let topSentencesArr = []
     for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
       topSentencesArr.push(this.verticies[sentenceOut])
