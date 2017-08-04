@@ -89,7 +89,8 @@ summaryBot.prototype.getTopSentences = function (numSentences) {
   let topSentencesArr = []
   if (!numSentences) {
     numSentences = this._findBestNumSentences()
-  } else if (numSentences > this.numVerticies) {
+  }
+  if (numSentences > this.numVerticies) {
     return this.originalSentences.join('.')
   } else {
     for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
