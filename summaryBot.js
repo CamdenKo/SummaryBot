@@ -70,22 +70,24 @@ summaryBot.prototype.run = function (text, numReturnSentences, testStatistics) {
 
 //returns the error between last run
 summaryBot.prototype.getTopSentences = function (numSentences) {
+  let out
   if (numSentences > this.numVerticies) {
-    throw new Error("there's not that many sentences to print")
+    out = this.originalSentences
+  } else {
+    this._sortVerticiesByWeight()
+    let topSentencesArr = []
+    for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
+      topSentencesArr.push(this.verticies[sentenceOut])
+    }
+    //out now only has the top sentence. now reorder by original order
+    topSentencesArr.sort(function (a, b) {
+      if (a.name < b.name) return -1
+      return 1
+    })
+    out = topSentencesArr.map(function (vert) {
+      return this.originalSentences[vert.name]
+    }.bind(this))
   }
-  this._sortVerticiesByWeight()
-  let topSentencesArr = []
-  for (let sentenceOut = 0; sentenceOut < numSentences; sentenceOut++) {
-    topSentencesArr.push(this.verticies[sentenceOut])
-  }
-  //out now only has the top sentence. now reorder by original order
-  topSentencesArr.sort(function (a, b) {
-    if (a.name < b.name) return -1
-    return 1
-  })
-  let out = topSentencesArr.map(function (vert) {
-    return this.originalSentences[vert.name]
-  }.bind(this))
   return out.join('. ') + '.'
 }
 
@@ -158,11 +160,9 @@ summaryBot.prototype._getEdgeTotals = function () {
 //in: vertex obj
 summaryBot.prototype._findSimilarity = function (vert1, vert2) {
   let overlap = 0
-
-  for(let word in vert1.words){
-    if(vert2.words[word]){
-
-      overlap += Math.pow(vert1.words[word] * vert2.words[word],.7)
+  for (let word in vert1.words){
+    if (vert2.words[word]){
+      overlap += Math.pow(vert1.words[word] * vert2.words[word], 0.7)
     }
   }
   return overlap / (Math.log(vert1.numWords) + Math.log(vert2.numWords))

@@ -64,6 +64,12 @@ describe('summaryBot', () => {
       expect(summaryBot.verticies[0].weight).to.be.greaterThan(summaryBot.verticies[2].weight)
     })
   })
+
+  describe('run', function() {
+    it('should return the original sentence if there are less sentences than requested', function() {
+      expect(summaryBot.run('hello.', 2)).to.eql('hello.')
+    })
+  })
   describe('_updateAllVertexWeights', function () {
     it('works', function () {
       summaryBot._proccessString('In high school, I followed my interest in high fantasy to take a speculative fiction course. This is where I got a real exposure to science fiction. Titles like Lord of Light and The Martian captivated me in the same way that high fantasy did when I was younger. Nowadays, I generally consume a lot less media, whether it be in print or in video. However, when I decided to take a writing course, I knew that I wanted it to be inside the realm of speculative fiction. Looking through the descriptions of all the courses, the only one that really caught my eye was Jewish SF 2290W. Although I have a limited exposure to Jewish culture, I believed that I would have enough to still be able to contribute to the conversation. Entering into the course, I hope that its focus is more on the literary aspects of science fiction. I want us to spend more time focusing on the influences of the author’s past in the text. As such, I wish that we would get more insight into the author’s lives before we read each piece. So far, I’ve found our discussion about the biblical references in I Have No Mouth and I Must Scream to be the most engaging. I think the class would be even more engaging if discussions like that occurred with less guidance. I would prefer if the class was given a topic to discuss instead of a specific question. While that plan may not work given how much content we go through in a single 50-minute class, I think that students should be given a larger opportunity to lead the discussion. I’m excited for the coming semester, and if the first week has been any indication, this class will offer me a lot of insight into both Judaism and science fiction.')
