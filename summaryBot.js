@@ -146,7 +146,7 @@ summaryBot.prototype._getEdgeTotals = function () {
       tempSum += this.verticies[vertexNum].edge[edgeN]
     }
     //if this node is unrelated set weight to 0
-    if (tempSum === 0) {
+    if (!tempSum) {
       this.verticies[vertexNum].weight = 0
       this.unconnectedVerticies.add(vertexNum)
     }
