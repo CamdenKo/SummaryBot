@@ -5,15 +5,15 @@ https://www.npmjs.com/package/summarybot
 ## Description
 A simple javascript script that will dissect text and pull the most relevant sentences. It uses techniques described in **TextRank: Bringing Order into Texts:** https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf
 
-## Use
-CLI
+## Installation
+### CLI
 ```
 npm install -S summarybot
 ```
 
-Javascript
+## Usage
+### Javascript
 ```javascript
-
 const SummaryBot = require('summarybot');
 const summarizer = new SummaryBot()
 const summary = summaryBot.run(text, numLinesOutput, summaryStatistics)
@@ -42,3 +42,11 @@ A single string that consists of only entire sentences. Paragraph integration wi
 A digit representing the number of sentences you wish summaryBot to output
 #### summaryStatistics:
 A boolean of whether or not to append statistics to the end of the result
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
